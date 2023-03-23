@@ -1,0 +1,14 @@
+web: Dieser Dienst verwendet das offizielle Nginx-Image und stellt den Webserver bereit.
+Es ist auf Port 80 verfügbar und hängt vom php- und db-Dienst ab, da es auf den PHP-Server und die MySQL-Datenbank zugreift.
+Es bindet auch die Dateien aus dem Verzeichnis ./web als statische Dateien ein und lädt die Konfigurationsdatei von ./nginx.conf.
+
+php: Dieser Dienst baut den PHP-Server aus dem aktuellen Verzeichnis und stellt es bereit.
+Es ist auf den MySQL-Datenbank-Service angewiesen und verwendet Umgebungsvariablen, um die Verbindung zur Datenbank herzustellen.
+Es bindet auch die Dateien aus dem Verzeichnis ./php als PHP-Dateien ein.
+
+db: Dieser Dienst verwendet das offizielle MySQL-Image und initialisiert die Datenbank mit dem angegebenen Root-Passwort und Datenbanknamen.
+Es erstellt auch ein Volume namens db-data, um die Datenbankdaten zwischen Container-Neustarts beizubehalten.
+
+Zusammen stellen diese Dienste eine vollständige Webanwendung bereit, die aus einem Nginx-Webserver, einem PHP-Server und einer MySQL-Datenbank besteht.
+Mit depends_on stellen wir sicher, dass die Dienste in der richtigen Reihenfolge gestartet werden,
+und mit build bauen wir die Anwendungen aus den entsprechenden Verzeichnissen.
