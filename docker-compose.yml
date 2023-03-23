@@ -1,17 +1,33 @@
 version: '3'
 
 services:
-  frontend:
-    build: ./frontend
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./web:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - backend
-
-  backend:
-    build: ./backend
+      - php
+      - db
+  php:
+    build: .
+    volumes:
+      - ./php:/var/www/html
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=my-secret-pw
+      - DB_NAME=my-database
     depends_on:
       - db
-
   db:
-    image: mysql
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: 12345
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=my-database
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:
